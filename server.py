@@ -4,24 +4,23 @@ from pymongo import MongoClient, errors
 import os
 from dotenv import load_dotenv
 
-# Load environment variables
+
 load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 
-# MongoDB connection with error handling
+
 try:
     client = MongoClient(os.getenv('MONGO_URI'), serverSelectionTimeoutMS=5000)  # Set timeout to 5 seconds
     db = client[os.getenv('DB_NAME')]
     users_collection = db['users']
     
-    # Try to ping the database to ensure connection is established
     client.admin.command('ping')
     print("Connected to MongoDB successfully.")
 except errors.ServerSelectionTimeoutError as err:
     print(f"Failed to connect to MongoDB: {err}")
-    exit(1)  # Exit if connection failed
+    exit(1) 
 
 @app.route('/register', methods=['POST'])
 def register():
