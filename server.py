@@ -12,7 +12,7 @@ CORS(app)
 
 
 try:
-    client = MongoClient(os.getenv('MONGO_URI'), serverSelectionTimeoutMS=5000)  # Set timeout to 5 seconds
+    client = MongoClient(os.getenv('MONGO_URI'), serverSelectionTimeoutMS=5000)  
     db = client[os.getenv('DB_NAME')]
     users_collection = db['users']
     
