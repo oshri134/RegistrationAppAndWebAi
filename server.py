@@ -47,6 +47,32 @@ def register():
     except Exception as e:
         print(f"Error during registration: {str(e)}")
         return jsonify({"error": "An unexpected error occurred"}), 500
+@app.route('/login', methods=['POST'])
+def login():
+    try:
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
 
+        if not all([email, password]):
+            return jsonify({"error": "Email and password are required"}), 400
+
+        user = users_collection.find_one({"email": email})
+
+        if not user or user["password"] != password:
+            return jsonify({"error": "Invalid email or password"}), 401
+
+        return jsonify({
+            "message": "Login successful",
+            "user": {
+                "username": user["username"],
+                "email": user["email"],
+            },
+            "toast": "Welcome back! You've successfully logged in."
+        }), 200
+    except Exception as e:
+        print(f"Error during login: {str(e)}")
+        return jsonify({"error": "An unexpected error occurred"}), 500
+    
 if __name__ == '__main__':
     app.run(debug=True)
